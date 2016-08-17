@@ -36,9 +36,14 @@ def parse_arguments(args):
         help='Compact the output to "username:password"'
     )
     parser.add_argument(
-        '--tofile', action='store_true',
+        '-f', '--tofile', action='store_true',
         help='Output "username:password" into file "accounts.txt"'
     )
+    parser.add_argument(
+        '-m', '--multiple', type=int, default=1,
+        help='Create multiple accounts at once (defaults to 1)'
+    )
+
 
     return parser.parse_args(args)
 
@@ -48,20 +53,23 @@ def entry():
     args = parse_arguments(sys.argv[1:])
     try:
         print("Creating new account:")
-        account_info = ptcaccount2.random_account(args.username, args.password, args.email, args.birthday)
 
-        if args.compact:
-            print('{}:{}'.format(account_info["username"], account_info["password"]))
-        else:
-            print('  Username:  {}'.format(account_info["username"]))
-            print('  Password:  {}'.format(account_info["password"]))
-            print('  Email   :  {}'.format(account_info["email"]))
-            print('\n')
+        for _ in range(args.multiple):
+            
+            account_info = ptcaccount2.random_account(args.username, args.password, args.email, args.birthday)
 
-        if args.tofile:
-            with open("accounts.txt",'a+') as writeto:
-                writeto.write('{}:{}'.format(account_info["username"], account_info["password"]) + "\n")
-            print "Appended to file accounts.txt"
+            if args.compact:
+                print('{}:{}'.format(account_info["username"], account_info["password"]))
+            else:
+                print('  Username:  {}'.format(account_info["username"]))
+                print('  Password:  {}'.format(account_info["password"]))
+                print('  Email   :  {}'.format(account_info["email"]))
+                print('\n')
+
+            if args.tofile:
+                with open("accounts.txt",'a+') as writeto:
+                    writeto.write('{}:{}'.format(account_info["username"], account_info["password"]) + "\n")
+                print "Appended to file accounts.txt"
 
     # Handle account creation failure exceptions
     except PTCInvalidPasswordException as err:
