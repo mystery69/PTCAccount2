@@ -163,7 +163,7 @@ def create_account(username, password, email, birthday):
     driver.execute_script("arguments[0].scrollIntoView(true);", elem)
 
     # Waits 1 minute for you to input captcha
-    WebDriverWait(driver, 60).until(EC.text_to_be_present_in_element_value((By.ID, "g-recaptcha-response"), ""))
+    WebDriverWait(driver, 600).until(EC.text_to_be_present_in_element_value((By.ID, "g-recaptcha-response"), ""))
     print("Captcha successful. Sleeping for 1 second...")
     time.sleep(1)
 

@@ -36,8 +36,12 @@ def parse_arguments(args):
         help='Compact the output to "username:password"'
     )
     parser.add_argument(
-        '-f', '--tofile', action='store_true',
+        '-f', '--tofile', action='store_true', default=True,
         help='Output "username:password" into file "accounts.txt"'
+    )
+    parser.add_argument(
+        '-csv', '--tocsv', action='store_true', default=True,
+        help='Output "username:password" into file "accounts.csv"'
     )
     parser.add_argument(
         '-m', '--multiple', type=int, default=1,
@@ -70,6 +74,10 @@ def entry():
                 with open("accounts.txt",'a+') as writeto:
                     writeto.write('{}:{}'.format(account_info["username"], account_info["password"]) + "\n")
                 print "Appended to file accounts.txt"
+            if args.tocsv:
+                with open("accounts.csv",'a+') as writeto:
+                    writeto.write('{};{}'.format(account_info["username"], account_info["password"]) + "\n")
+                print "Appended to file accounts.csv"
 
     # Handle account creation failure exceptions
     except PTCInvalidPasswordException as err:
